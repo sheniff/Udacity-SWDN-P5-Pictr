@@ -8,5 +8,15 @@
       <br>
       <em>{{post.createdAt | date}}</em>
     </div>
+
+    <ion-list>
+      <ion-item *ngFor="let comment of post.comments" text-wrap>
+        <ion-avatar item-left>
+          <img src="{{comment.creator.avatar}}">
+        </ion-avatar>
+        <p>{{comment.creator.name}} @ {{comment.createdAt | date}} said:</p>
+        <h3>{{comment.message}}</h3>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
