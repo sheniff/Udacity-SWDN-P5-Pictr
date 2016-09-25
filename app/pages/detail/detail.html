@@ -10,6 +10,19 @@
     </div>
 
     <ion-list>
+      <form (submit)="comment($event, newComment)">
+        <ion-item>
+          <ion-label>
+            <ion-icon name="text"></ion-icon>
+          </ion-label>
+          <ion-input [(ngModel)]="newComment"
+          name="newComment"
+          placeholder="Say something..."
+          clearInput></ion-input>
+          <button type="submit" item-right>Send</button>
+        </ion-item>
+      </form>
+
       <ion-item *ngFor="let comment of post.comments" text-wrap>
         <ion-avatar item-left>
           <img src="{{comment.creator.avatar}}">

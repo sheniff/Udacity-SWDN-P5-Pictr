@@ -46,7 +46,7 @@ export let mockPosts: Array<IPost> = [
     message: 'Awww cutie puppieeeeeee!! :DDD <3 <3 <3',
     creator: mockUsers[0],
     numComments: 121,
-    comments: mockComments.slice()
+    comments: mockComments.slice().reverse()
   }
 ]
 
