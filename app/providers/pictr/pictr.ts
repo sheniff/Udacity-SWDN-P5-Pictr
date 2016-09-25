@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { mockPosts, mockUser } from '../../providers/mocks';
+import { mockPosts, mockUser, mockTimeline } from '../../providers/mocks';
 
 export interface IPost {
   createdAt: Date;
@@ -29,14 +29,23 @@ export interface IComment {
   message: string;
 }
 
+export interface ITimelineEntry {
+  creator: IUser;
+  createdAt: Date;
+  action: string;
+  post: IPost;
+}
+
 @Injectable()
 export class Pictr {
   private user: IUser;
   private posts: Array<IPost>;
+  private timeline: Array<ITimelineEntry>;
 
   constructor(private http: Http) {
     this.user = mockUser;
     this.posts = mockPosts;
+    this.timeline = mockTimeline;
   }
 
   searchPics(q: string) {
@@ -64,6 +73,10 @@ export class Pictr {
 
   getAllPosts(): Array<IPost> {
     return this.posts;
+  }
+
+  getTimeline(): Array<ITimelineEntry> {
+    return this.timeline;
   }
 
   groupBy(input: Array<any>, groupSize: number = 3): Array<Array<any>> {

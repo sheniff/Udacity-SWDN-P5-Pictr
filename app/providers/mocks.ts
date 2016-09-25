@@ -1,4 +1,4 @@
-import { IPost, IUser } from './pictr/pictr';
+import { IPost, IUser, ITimelineEntry } from './pictr/pictr';
 
 export let mockPosts: Array<IPost> = [
   {
@@ -19,3 +19,17 @@ export let mockUser: IUser = {
   numPictrs: 53,
   numComments: 1532
 }
+
+export let mockTimeline: Array<ITimelineEntry> = [
+  {
+    createdAt: new Date(),
+    action: 'Commented on a Pictr',
+    creator: mockUser,
+    post: mockPosts[0]
+  }, {
+    createdAt: new Date(),
+    action: 'Created a new Pictr',
+    creator: mockUser,
+    post: mockPosts[0]
+  }
+]
