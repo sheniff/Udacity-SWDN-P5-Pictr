@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Pictr, IPost } from '../../providers/pictr/pictr';
+import { DetailPage } from '../detail/detail';
 
 @Component({
   templateUrl: 'build/pages/create/create.html',
@@ -24,8 +25,7 @@ export class CreatePage {
 
   savePost(post: IPost) {
     this.pictr.storePost(post);
-    // TODO: move to "Post detail" page
-    // this.navCtrl.push();
+    this.navCtrl.push(DetailPage, { post: post });
   }
 
   private initPost() {

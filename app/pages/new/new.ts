@@ -32,9 +32,12 @@ export class NewPictrPage {
   public search(event) {
     let val: string = event.target.value;
 
-    if (val.length) {
+    if (!!val && val.length) {
       this.pictr.searchPics(val)
-      .subscribe(res => this.results = this.formatResult(res));
+      .subscribe(res => {
+        res.unshift(this.fromCameraTile);
+        this.results = this.pictr.groupBy(res);
+      });
     } else {
       this.clearResults();
     }
@@ -47,21 +50,5 @@ export class NewPictrPage {
 
   public clearResults() {
     this.results = [[this.fromCameraTile]];
-  }
-
-  private formatResult(results: Array<any>): Array<Array<ISearchResult>> {
-    results.unshift(this.fromCameraTile);
-    let response: Array<Array<ISearchResult>> = [];
-    let block: Array<ISearchResult>;
-
-    results.forEach((res, index) => {
-      if (index % 3 === 0) {
-        block = [];
-        response.push(block);
-      }
-      block.push(res);
-    });
-
-    return response;
   }
 }

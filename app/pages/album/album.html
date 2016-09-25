@@ -1,0 +1,12 @@
+<ion-content>
+  <ion-grid>
+    <ion-row *ngFor="let set of album">
+      <ion-col width-33 *ngFor="let res of set">
+        <img (click)="onPicSelected($event, res)" src="{{res.link}}" />
+        <div class="">
+          <ion-icon name="text"></ion-icon> {{ res.numComments || 0 }}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

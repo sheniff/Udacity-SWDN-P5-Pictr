@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { mockPosts } from '../../providers/mocks';
 
 export interface IPost {
   createdAt: Date;
   link: string;
   message: string;
-  creator: string;
+  creator: IUser;
   numComments?: number;
 }
 
@@ -17,6 +18,13 @@ export interface ISearchResult {
 
 export interface IUser {
   name: string;
+  avatar?: string;
+}
+
+export interface IComment {
+  creator: IUser;
+  createdAt: Date;
+  message: string;
 }
 
 @Injectable()
@@ -26,7 +34,7 @@ export class Pictr {
 
   constructor(private http: Http) {
     this.user = { name: 'johnDoe' };
-    this.posts = [];
+    this.posts = mockPosts;
   }
 
   searchPics(q: string) {
@@ -43,11 +51,31 @@ export class Pictr {
       );
   }
 
-  getCurrentUser(): string {
-    return this.user.name;
+  getCurrentUser(): IUser {
+    return this.user;
   }
 
   storePost(post: IPost) {
     this.posts.unshift(post);
+    console.log('post stored', this.posts);
+  }
+
+  getAllPosts(): Array<IPost> {
+    return this.posts;
+  }
+
+  groupBy(input: Array<any>, groupSize: number = 3): Array<Array<any>> {
+    let response: Array<Array<IPost>> = [];
+    let block: Array<IPost>;
+
+    input.forEach((res, index) => {
+      if (index % groupSize === 0) {
+        block = [];
+        response.push(block);
+      }
+      block.push(res);
+    });
+
+    return response;
   }
 }
