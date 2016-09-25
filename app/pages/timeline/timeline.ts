@@ -16,7 +16,7 @@ export class TimelinePage {
     this.timeline = pictr.getTimeline();
   }
 
-  onViewWillEnter() {
+  ionViewWillEnter() {
     this.timeline = this.pictr.getTimeline();
   }
 }

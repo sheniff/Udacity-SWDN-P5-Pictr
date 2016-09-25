@@ -37,6 +37,8 @@ export interface ITimelineEntry {
   post: IPost;
 }
 
+const AUTH = 'Client-ID 7dc73ec260e06c5';
+
 @Injectable()
 export class Pictr {
   private user: IUser;
@@ -51,7 +53,7 @@ export class Pictr {
 
   searchPics(q: string) {
     let headers = new Headers();
-    headers.append('Authorization', 'Client-ID 7dc73ec260e06c5');
+    headers.append('Authorization', AUTH);
 
     return this.http
       .get(`https://api.imgur.com/3/gallery/search?q_any=${q}&q_type=png&q_size_px=med`,
@@ -60,6 +62,23 @@ export class Pictr {
         res.json().data.map(res => {
           return { link: res.link, title: res.title }
         })
+      );
+  }
+
+  getRandomPics() {
+    let regx = /\.(jpg|png|gif)$/;
+    let headers = new Headers();
+    headers.append('Authorization', AUTH);
+
+    return this.http
+      .get(`https://api.imgur.com/3/gallery/random/random`,
+      { headers })
+      .map(res =>
+        res.json().data
+          .map(res => {
+            return { link: res.link, title: res.title }
+          })
+          .filter(res => res.link.match(regx))
       );
   }
 

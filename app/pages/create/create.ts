@@ -19,7 +19,7 @@ export class CreatePage {
     this.initPost();
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.initPost();
   }
 

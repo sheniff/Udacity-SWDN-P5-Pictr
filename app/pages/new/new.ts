@@ -17,11 +17,16 @@ export class NewPictrPage {
   constructor(
     public navCtrl: NavController,
     private pictr: Pictr
-  ) {
-    this.clearResults();
+  ) {}
+
+  ionViewWillEnter() {
+    this.pictr.getRandomPics().subscribe(res => {
+      res.unshift(this.fromCameraTile);
+      this.results = this.pictr.groupBy(res);
+    });
   }
 
-  public onPicSelected(event, pic) {
+  onPicSelected(event, pic) {
     if (pic.title === this.fromCameraTile.title) {
       this.getFromCamera();
     } else {
@@ -29,7 +34,7 @@ export class NewPictrPage {
     }
   }
 
-  public search(event) {
+  search(event) {
     let val: string = event.target.value;
 
     if (!!val && val.length) {
@@ -43,12 +48,12 @@ export class NewPictrPage {
     }
   }
 
-  public getFromCamera() {
+  getFromCamera() {
     // TODO: Take picture or from gallery if clicked
     console.log('getFromCamera WIP');
   }
 
-  public clearResults() {
+  clearResults() {
     this.results = [[this.fromCameraTile]];
   }
 }

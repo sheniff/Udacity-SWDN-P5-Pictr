@@ -12,7 +12,7 @@ export class ProfilePage {
     this.profile = this.pictr.getCurrentUser();
   }
 
-  onViewWillEnter() {
+  ionViewWillEnter() {
     this.profile = this.pictr.getCurrentUser();
   }
 
