@@ -1,0 +1,35 @@
+<ion-content>
+  <div class="">
+    <img src="{{post.link}}" alt="post by {{post.creator.name}}" />
+    <div class="">
+      <strong>{{post.creator.name}} wrote:</strong>
+      <br>
+      {{post.message}}
+      <br>
+      <em>{{post.createdAt | date}}</em>
+    </div>
+
+    <ion-list>
+      <form (submit)="comment($event, newComment)">
+        <ion-item>
+          <ion-label>
+            <ion-icon name="text"></ion-icon>
+          </ion-label>
+          <ion-input [(ngModel)]="newComment"
+          name="newComment"
+          placeholder="Say something..."
+          clearInput></ion-input>
+          <button type="submit" item-right>Send</button>
+        </ion-item>
+      </form>
+
+      <ion-item *ngFor="let comment of post.comments" text-wrap>
+        <ion-avatar item-left>
+          <img src="{{comment.creator.avatar}}">
+        </ion-avatar>
+        <p>{{comment.creator.name}} @ {{comment.createdAt | date}} said:</p>
+        <h3>{{comment.message}}</h3>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

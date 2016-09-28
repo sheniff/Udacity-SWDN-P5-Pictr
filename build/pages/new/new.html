@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-searchbar
+    [(ngModel)]="searchInput"
+    [showCancelButton]="true"
+    (ionInput)="search($event)">
+  </ion-searchbar>
+</ion-header>
+
+<ion-content class="newPictr">
+  <ion-grid>
+    <ion-row *ngFor="let set of results">
+      <ion-col width-33 *ngFor="let res of set">
+        <img (click)="onPicSelected($event, res)" src="{{res.link}}" alt="{{res.title}}" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

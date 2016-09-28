@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{profile.name}}'s Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <img (click)="getFromCamera()" src="{{profile.avatar}}" alt="{{profile.name}}'s avatar'" />
+  <ion-list>
+    <ion-item>
+      <ion-label primary>
+        Username
+        <ion-icon icon="edit"></ion-icon>
+      </ion-label>
+      <ion-input [ngModel]="profile.name"
+        (ngModelChange)="saveUsername($event)"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col width-50>
+        <strong>{{profile.numPictrs}}</strong>
+        <br>
+        PICTRS
+      </ion-col>
+      <ion-col width-50>
+        <strong>{{profile.numComments}}</strong>
+        <br>
+        COMMENTS
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,24 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>new Pictr</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <img src="{{pic.link}}" alt="{{pic.name}}" />
+
+  <form class="" (ngSubmit)="savePost(post)">
+    <ion-item>
+      <ion-label floating>
+        <ion-icon name="text"></ion-icon>
+        Say something about it...
+      </ion-label>
+      <ion-textarea [(ngModel)]="post.message" rows="3" name="message">
+      </ion-textarea>
+    </ion-item>
+    <button full>Post it</button>
+  </form>
+
+</ion-content>
