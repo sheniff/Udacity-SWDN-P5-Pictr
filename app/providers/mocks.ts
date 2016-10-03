@@ -42,8 +42,8 @@ export let mockComments: Array<IComment> = [
 export let mockPosts: Array<IPost> = [
   {
     createdAt: new Date(),
-    link: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
-    message: 'Awww cutie puppieeeeeee!! :DDD <3 <3 <3',
+    link: 'http://i.imgur.com/0F374vh.jpg',
+    message: 'Awww cutieeeee!! :DDD <3 <3 <3',
     creator: mockUsers[0],
     numComments: 121,
     comments: mockComments.slice().reverse()

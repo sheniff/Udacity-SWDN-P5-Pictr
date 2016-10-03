@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Pictr, IPost, IComment } from '../../providers/pictr/pictr';
 import { ImgurResize } from '../../pipes/imgurResize';
+import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 
 @Component({
   templateUrl: 'build/pages/detail/detail.html',
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
   providers: [Pictr],
   pipes: [ImgurResize]
 })

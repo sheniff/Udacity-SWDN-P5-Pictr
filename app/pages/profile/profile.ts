@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Pictr, IUser } from '../../providers/pictr/pictr';
+import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 
 @Component({
   templateUrl: 'build/pages/profile/profile.html',
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
   providers: [Pictr]
 })
 export class ProfilePage {

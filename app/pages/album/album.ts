@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Pictr, IPost } from '../../providers/pictr/pictr';
+import { ImgurResize } from '../../pipes/imgurResize';
 import { DetailPage } from '../detail/detail';
 
 @Component({
   templateUrl: 'build/pages/album/album.html',
-  providers: [Pictr]
+  providers: [Pictr],
+  pipes: [ImgurResize]
 })
 export class AlbumPage {
   public album: Array<Array<IPost>>;

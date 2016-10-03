@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Pictr, IPost } from '../../providers/pictr/pictr';
 import { DetailPage } from '../detail/detail';
+import { ImgurResize } from '../../pipes/imgurResize';
 
 @Component({
   templateUrl: 'build/pages/create/create.html',
-  providers: [Pictr]
+  providers: [Pictr],
+  pipes: [ImgurResize]
 })
 export class CreatePage {
   public pic: any;

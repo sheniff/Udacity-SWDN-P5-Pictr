@@ -16,8 +16,15 @@
         <ion-icon icon="edit"></ion-icon>
       </ion-label>
       <ion-input [ngModel]="profile.name"
-        (ngModelChange)="saveUsername($event)"></ion-input>
+        required
+        #name="ngModel"
+        (ngModelChange)="name.valid && saveUsername($event)"></ion-input>
     </ion-item>
+    <div *ngIf="!name.valid" style="text-align:center">
+      <p *ngIf="name.errors.required" style="color:red">
+        Username is required!
+      </p>
+    </div>
   </ion-list>
 
   <ion-grid>

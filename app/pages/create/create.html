@@ -1,13 +1,11 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>new Pictr</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content>
-  <img src="{{pic.link}}" alt="{{pic.name}}" />
+  <img src="{{pic.link | imgur:'m'}}" alt="{{pic.name}}" />
 
   <form class="" (ngSubmit)="savePost(post)">
     <ion-item>

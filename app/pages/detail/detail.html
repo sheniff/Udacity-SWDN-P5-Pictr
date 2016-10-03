@@ -1,16 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ post.creator.name }}'s Pictr</ion-title>
+  </ion-navbar>
+</ion-header>
+
 <ion-content>
-  <div class="">
-    <img src="{{post.link}}" alt="post by {{post.creator.name}}" />
-    <div class="">
-      <strong>{{post.creator.name}} wrote:</strong>
-      <br>
-      {{post.message}}
-      <br>
+  <div>
+    <img src="{{post.link | imgur:'m'}}" alt="post by {{post.creator.name}}" />
+    <div>
+      <div *ngIf="!!post.message">
+        <strong>{{post.creator.name}} wrote:</strong>
+        <br>
+        {{post.message}}
+        <br>
+      </div>
       <em>{{post.createdAt | date}}</em>
     </div>
 
     <ion-list>
-      <form (submit)="comment($event, newComment)">
+      <form (submit)="comment($event, newComment)" novalidate>
         <ion-item>
           <ion-label>
             <ion-icon name="text"></ion-icon>
@@ -18,9 +26,16 @@
           <ion-input [(ngModel)]="newComment"
           name="newComment"
           placeholder="Say something..."
-          clearInput></ion-input>
-          <button type="submit" item-right>Send</button>
+          #comm="ngModel"
+          clearInput required></ion-input>
+          <button type="submit" item-right
+            [disabled]="!comm.valid">Send</button>
         </ion-item>
+        <div *ngIf="!comm.valid" style="text-align:center">
+          <p *ngIf="comm.errors.required" style="color:red">
+            A comment is required to post
+          </p>
+        </div>
       </form>
 
       <ion-item *ngFor="let comment of post.comments" text-wrap>
