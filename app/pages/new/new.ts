@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
 import { ImgurResize } from '../../pipes/imgurResize';
+import { Camera } from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/new/new.html',
@@ -51,8 +52,19 @@ export class NewPictrPage {
   }
 
   getFromCamera() {
-    // TODO: Take picture or from gallery if clicked
-    console.log('getFromCamera WIP');
+    Camera.getPicture({}).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // // If it's base64:
+      // let base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.navCtrl.push(CreatePage, { pic: {
+        link: imageData,
+        title: 'Picture just taken'
+      } });
+    }, (err) => {
+     // Handle error
+     console.log('err', err);
+     alert(err);
+    });
   }
 
   clearResults() {
