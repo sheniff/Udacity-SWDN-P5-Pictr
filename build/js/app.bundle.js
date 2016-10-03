@@ -48,6 +48,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
 var pictr_1 = require('../../providers/pictr/pictr');
+var imgurResize_1 = require('../../pipes/imgurResize');
 var detail_1 = require('../detail/detail');
 var AlbumPage = (function () {
     function AlbumPage(navCtrl, pictr) {
@@ -64,7 +65,8 @@ var AlbumPage = (function () {
     AlbumPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/album/album.html',
-            providers: [pictr_1.Pictr]
+            providers: [pictr_1.Pictr],
+            pipes: [imgurResize_1.ImgurResize]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.NavController, pictr_1.Pictr])
     ], AlbumPage);
@@ -72,7 +74,7 @@ var AlbumPage = (function () {
 }());
 exports.AlbumPage = AlbumPage;
 
-},{"../../providers/pictr/pictr":11,"../detail/detail":4,"@angular/core":159,"ionic-angular":473}],3:[function(require,module,exports){
+},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"../detail/detail":4,"@angular/core":159,"ionic-angular":473}],3:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -87,6 +89,7 @@ var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
 var pictr_1 = require('../../providers/pictr/pictr');
 var detail_1 = require('../detail/detail');
+var imgurResize_1 = require('../../pipes/imgurResize');
 var CreatePage = (function () {
     function CreatePage(navCtrl, navParams, pictr) {
         this.navCtrl = navCtrl;
@@ -113,7 +116,8 @@ var CreatePage = (function () {
     CreatePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/create/create.html',
-            providers: [pictr_1.Pictr]
+            providers: [pictr_1.Pictr],
+            pipes: [imgurResize_1.ImgurResize]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams, pictr_1.Pictr])
     ], CreatePage);
@@ -121,7 +125,7 @@ var CreatePage = (function () {
 }());
 exports.CreatePage = CreatePage;
 
-},{"../../providers/pictr/pictr":11,"../detail/detail":4,"@angular/core":159,"ionic-angular":473}],4:[function(require,module,exports){
+},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"../detail/detail":4,"@angular/core":159,"ionic-angular":473}],4:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -136,6 +140,7 @@ var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
 var pictr_1 = require('../../providers/pictr/pictr');
 var imgurResize_1 = require('../../pipes/imgurResize');
+var forms_1 = require('@angular/forms');
 var DetailPage = (function () {
     function DetailPage(navCtrl, navParams, pictr) {
         this.navCtrl = navCtrl;
@@ -161,6 +166,7 @@ var DetailPage = (function () {
     DetailPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/detail/detail.html',
+            directives: [forms_1.FORM_DIRECTIVES, forms_1.REACTIVE_FORM_DIRECTIVES],
             providers: [pictr_1.Pictr],
             pipes: [imgurResize_1.ImgurResize]
         }), 
@@ -170,7 +176,7 @@ var DetailPage = (function () {
 }());
 exports.DetailPage = DetailPage;
 
-},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"@angular/core":159,"ionic-angular":473}],5:[function(require,module,exports){
+},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"@angular/core":159,"@angular/forms":248,"ionic-angular":473}],5:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -186,6 +192,7 @@ var ionic_angular_1 = require('ionic-angular');
 var create_1 = require('../create/create');
 var pictr_1 = require('../../providers/pictr/pictr');
 var imgurResize_1 = require('../../pipes/imgurResize');
+var ionic_native_1 = require('ionic-native');
 var NewPictrPage = (function () {
     function NewPictrPage(navCtrl, pictr) {
         this.navCtrl = navCtrl;
@@ -225,8 +232,18 @@ var NewPictrPage = (function () {
         }
     };
     NewPictrPage.prototype.getFromCamera = function () {
-        // TODO: Take picture or from gallery if clicked
-        console.log('getFromCamera WIP');
+        var _this = this;
+        ionic_native_1.Camera.getPicture({}).then(function (imageData) {
+            // imageData is either a base64 encoded string or a file URI
+            _this.navCtrl.push(create_1.CreatePage, { pic: {
+                    link: 'data:image/jpeg;base64,' + imageData,
+                    title: 'Picture just taken'
+                } });
+        }, function (err) {
+            // Handle error
+            console.log('err', err);
+            alert(err);
+        });
     };
     NewPictrPage.prototype.clearResults = function () {
         this.results = [[this.fromCameraTile]];
@@ -243,7 +260,7 @@ var NewPictrPage = (function () {
 }());
 exports.NewPictrPage = NewPictrPage;
 
-},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"../create/create":3,"@angular/core":159,"ionic-angular":473}],6:[function(require,module,exports){
+},{"../../pipes/imgurResize":9,"../../providers/pictr/pictr":11,"../create/create":3,"@angular/core":159,"ionic-angular":473,"ionic-native":500}],6:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -256,6 +273,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var pictr_1 = require('../../providers/pictr/pictr');
+var forms_1 = require('@angular/forms');
+var ionic_native_1 = require('ionic-native');
 var ProfilePage = (function () {
     function ProfilePage(pictr) {
         this.pictr = pictr;
@@ -268,12 +287,20 @@ var ProfilePage = (function () {
         this.profile.name = value;
     };
     ProfilePage.prototype.getFromCamera = function () {
-        // TODO: Take picture or from gallery if clicked
-        console.log('getFromCamera WIP');
+        var _this = this;
+        ionic_native_1.Camera.getPicture({}).then(function (imageData) {
+            // imageData is either a base64 encoded string or a file URI
+            _this.profile.avatar = 'data:image/jpeg;base64,' + imageData;
+        }, function (err) {
+            // Handle error
+            console.log('err', err);
+            alert(err);
+        });
     };
     ProfilePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/profile/profile.html',
+            directives: [forms_1.FORM_DIRECTIVES, forms_1.REACTIVE_FORM_DIRECTIVES],
             providers: [pictr_1.Pictr]
         }), 
         __metadata('design:paramtypes', [pictr_1.Pictr])
@@ -282,7 +309,7 @@ var ProfilePage = (function () {
 }());
 exports.ProfilePage = ProfilePage;
 
-},{"../../providers/pictr/pictr":11,"@angular/core":159}],7:[function(require,module,exports){
+},{"../../providers/pictr/pictr":11,"@angular/core":159,"@angular/forms":248,"ionic-native":500}],7:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -429,8 +456,8 @@ exports.mockComments = [
 exports.mockPosts = [
     {
         createdAt: new Date(),
-        link: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
-        message: 'Awww cutie puppieeeeeee!! :DDD <3 <3 <3',
+        link: 'http://i.imgur.com/0F374vh.jpg',
+        message: 'Awww cutieeeee!! :DDD <3 <3 <3',
         creator: exports.mockUsers[0],
         numComments: 121,
         comments: exports.mockComments.slice().reverse()
