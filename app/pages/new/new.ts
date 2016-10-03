@@ -54,10 +54,8 @@ export class NewPictrPage {
   getFromCamera() {
     Camera.getPicture({}).then((imageData) => {
       // imageData is either a base64 encoded string or a file URI
-      // // If it's base64:
-      // let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.navCtrl.push(CreatePage, { pic: {
-        link: imageData,
+        link: 'data:image/jpeg;base64,' + imageData,
         title: 'Picture just taken'
       } });
     }, (err) => {
