@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
+import { ImgurResize } from '../../pipes/imgurResize';
 
 @Component({
   templateUrl: 'build/pages/new/new.html',
-  providers: [Pictr]
+  providers: [Pictr],
+  pipes: [ImgurResize]
 })
 export class NewPictrPage {
   public results: Array<Array<ISearchResult>>;

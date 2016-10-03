@@ -9,8 +9,16 @@
 <ion-content class="newPictr">
   <ion-grid>
     <ion-row *ngFor="let set of results">
-      <ion-col width-33 *ngFor="let res of set">
-        <img (click)="onPicSelected($event, res)" src="{{res.link}}" alt="{{res.title}}" />
+      <ion-col width-33>
+        <img (click)="onPicSelected($event, set[0])" src="{{set[0].link}}" alt="{{set[0].title}}" />
+      </ion-col>
+      <ion-col width-33 *ngFor="let res of set.slice(1, 3)">
+        <img (click)="onPicSelected($event, res)" src="{{res.link | imgur:'s'}}" alt="{{res.title}}" />
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let set of results">
+      <ion-col width-33 *ngFor="let res of set.slice(3)">
+        <img (click)="onPicSelected($event, res)" src="{{res.link | imgur:'s'}}" alt="{{res.title}}" />
       </ion-col>
     </ion-row>
   </ion-grid>

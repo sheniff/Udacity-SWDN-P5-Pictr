@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Pictr, IPost, IComment } from '../../providers/pictr/pictr';
+import { ImgurResize } from '../../pipes/imgurResize';
 
 @Component({
   templateUrl: 'build/pages/detail/detail.html',
-  providers: [Pictr]
+  providers: [Pictr],
+  pipes: [ImgurResize]
 })
 export class DetailPage {
   public post: IPost;
@@ -23,6 +25,10 @@ export class DetailPage {
 
     if (!message || !message.length) {
       return;
+    }
+
+    if (!this.post.comments) {
+      this.post.comments = [];
     }
 
     this.post.comments.unshift({
