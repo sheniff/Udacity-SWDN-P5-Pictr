@@ -1,8 +1,10 @@
 {
-  "name": "My Ionic App",
-  "short_name": "My Ionic App",
+  "lang": "en",
+  "name": "Pictr",
+  "short_name": "Pictr",
   "start_url": "index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "icons": [{
     "src": "icon.png",
     "sizes": "512x512",

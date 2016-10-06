@@ -1,0 +1,17 @@
+{
+  "swFile": "www/sw.js",
+  "staticFileGlobs": [
+    "www/manifest.json",
+    "www/**/*.css",
+    "www/**/*.{ttf,woff,woff2,eof}",
+    "www/**/*.js",
+    "www/**/*.html",
+    "www/**/*.{png,jpg,gif,svg,mp3}"
+  ],
+  "handleFetch": true,
+  "stripPrefix": "www/",
+  "cacheId": "pictr-v1",
+  "maximumFileSizeToCacheInBytes": 4194304,
+  "ignoreUrlParametersMatching": "[/./]",
+  "verbose": true
+}
