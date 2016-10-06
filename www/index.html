@@ -22,14 +22,13 @@
 
   <link rel="manifest" href="manifest.json">
 
-  <!-- un-comment this code to enable service worker
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
+      navigator.serviceWorker.register('sw.js')
         .then(() => console.log('service worker installed'))
         .catch(err => console.log('Error', err));
     }
-  </script>-->
+  </script>
 
   <link ios-href="build/css/app.ios.css" rel="stylesheet">
   <link md-href="build/css/app.md.css" rel="stylesheet">

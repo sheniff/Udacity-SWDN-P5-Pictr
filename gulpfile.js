@@ -65,6 +65,8 @@ gulp.task('build', ['clean'], function(done){
   );
 });
 
+// Note: this task builds sw.js in /www/sw.js, not inside /platforms/browser/www/sw.js
+// Maybe needs to be changed later?
 gulp.task('sw', function(callback) {
   var path = require('path');
   var swPrecache = require('sw-precache');
