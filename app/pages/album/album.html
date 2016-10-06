@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row *ngFor="let set of album">
       <ion-col width-33 *ngFor="let res of set">
-        <img (click)="onPicSelected($event, res)" src="{{res.link | imgur:'s'}}" />
+        <img (click)="onPicSelected($event, res)" src="{{res.link | imgur:'s'}}" alt="{{res.title}}" />
         <div class="">
           <ion-icon name="text"></ion-icon> {{ res.numComments || 0 }}
         </div>

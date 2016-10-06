@@ -35,6 +35,7 @@ export class CreatePage {
     this.post = {
       createdAt: new Date(),
       link: this.pic.link,
+      title: this.pic.title,
       message: '',
       creator: this.pictr.getCurrentUser()
     };

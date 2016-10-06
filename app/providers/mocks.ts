@@ -42,6 +42,7 @@ export let mockComments: Array<IComment> = [
 export let mockPosts: Array<IPost> = [
   {
     createdAt: new Date(),
+    title: 'my hedgehog',
     link: 'http://i.imgur.com/0F374vh.jpg',
     message: 'Awww cutieeeee!! :DDD <3 <3 <3',
     creator: mockUsers[0],

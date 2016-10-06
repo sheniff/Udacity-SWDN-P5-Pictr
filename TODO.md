@@ -2,8 +2,7 @@
 * Set up manifest to download all the assets beforehand
 * Remember how to use service workers to serve offline pages
 * Show toast while loading or when no connection detected
-* Use native camera API
-
+* Use GPS to locate the messages
 
 # Rubric
 

@@ -40,7 +40,7 @@
 
       <ion-item *ngFor="let comment of post.comments" text-wrap>
         <ion-avatar item-left>
-          <img src="{{comment.creator.avatar}}">
+          <img src="{{comment.creator.avatar}}" alt="{{comment.creator.name}}'s avatar">
         </ion-avatar>
         <p>{{comment.creator.name}} @ {{comment.createdAt | date}} said:</p>
         <h3>{{comment.message}}</h3>

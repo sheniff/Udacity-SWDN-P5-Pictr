@@ -6,6 +6,7 @@ import { mockPosts, mockUsers, mockTimeline } from '../../providers/mocks';
 export interface IPost {
   createdAt: Date;
   link: string;
+  title: string;
   message: string;
   creator: IUser;
   numComments?: number;
