@@ -10,8 +10,11 @@
   ],
   "handleFetch": true,
   "stripPrefix": "www/",
-  "cacheId": "pictr-v1",
+  "cacheId": "pictr-v1.2",
   "maximumFileSizeToCacheInBytes": 4194304,
   "ignoreUrlParametersMatching": "[/./]",
-  "verbose": true
+  "verbose": true,
+  "importScripts": [
+    "service-worker.js"
+  ]
 }

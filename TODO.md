@@ -1,5 +1,4 @@
 * Style this shit. Specially the img grids.
-* Set up manifest to download all the assets beforehand
 * Remember how to use service workers to serve offline pages
 * Show toast while loading or when no connection detected
 * Use GPS to locate the messages
