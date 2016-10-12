@@ -36,11 +36,7 @@ export class NewPictrPage {
   }
 
   onPicSelected(event, pic) {
-    if (pic.title === this.fromCameraTile.title) {
-      this.getFromCamera();
-    } else {
-      this.navCtrl.push(CreatePage, { pic: pic });
-    }
+    this.navCtrl.push(CreatePage, { pic: pic });
   }
 
   search(event) {

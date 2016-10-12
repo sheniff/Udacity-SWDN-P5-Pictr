@@ -60,7 +60,7 @@ export class Pictr {
       .get(`https://api.imgur.com/3/gallery/search?q_any=${q}&q_type=png&q_size_px=med`,
       { headers })
       .map(res =>
-        res.json().data.slice(0, 21).map(res => {
+        res.json().data.slice(0, 20).map(res => {
           return { link: res.link, title: res.title }
         })
       );
@@ -75,11 +75,12 @@ export class Pictr {
       .get(`https://api.imgur.com/3/gallery/random/random`,
       { headers })
       .map(res =>
-        res.json().data.slice(0, 21)
+        res.json().data
           .map(res => {
             return { link: res.link, title: res.title }
           })
           .filter(res => res.link.match(regx))
+          .slice(0, 20)
       );
   }
 
