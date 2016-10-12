@@ -1,4 +1,3 @@
-* Style this shit. Specially the img grids.
 * Remember how to use service workers to serve offline pages
 * Show toast while loading or when no connection detected
 * Use GPS to locate the messages

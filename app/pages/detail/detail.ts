@@ -13,6 +13,7 @@ import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 export class DetailPage {
   public post: IPost;
   public newComment: string;
+  public triedToSubmit: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -20,10 +21,12 @@ export class DetailPage {
     private pictr: Pictr
   ) {
     this.post = this.navParams.get('post');
+    this.triedToSubmit = false;
   }
 
   comment(event: any, message: string) {
     event.preventDefault();
+    this.triedToSubmit = true;
 
     if (!message || !message.length) {
       return;
@@ -40,5 +43,6 @@ export class DetailPage {
     });
 
     this.newComment = '';
+    this.triedToSubmit = false;
   }
 }

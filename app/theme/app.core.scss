@@ -2,6 +2,7 @@
 
 img {
   width: 100%;
+  background-color: gainsboro;
 }
 
 // App Shared Imports
@@ -13,3 +14,4 @@ img {
 @import "../pages/new/new";
 @import "../pages/create/create";
 @import "../pages/profile/profile";
+@import "../pages/detail/detail";

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
 import { ImgurResize } from '../../pipes/imgurResize';
@@ -12,6 +12,7 @@ import { Camera } from 'ionic-native';
 })
 export class NewPictrPage {
   public results: Array<Array<ISearchResult>>;
+  public loader;
   private fromCameraTile: ISearchResult = {
     link: 'http://shopproject30.com/wp-content/themes/venera/images/placeholder-camera-green.png',
     title: '#pictr#camera#'
@@ -19,10 +20,15 @@ export class NewPictrPage {
 
   constructor(
     public navCtrl: NavController,
-    private pictr: Pictr
-  ) {}
+    private pictr: Pictr,
+    private loading: LoadingController
+  ) {
+    this.loader = loading.create({
+      content: 'Loading...'
+    });
+  }
 
-  ionViewWillEnter() {
+  ngOnInit() {
     this.pictr.getRandomPics().subscribe(res => {
       res.unshift(this.fromCameraTile);
       this.results = this.pictr.groupBy(res);
@@ -41,10 +47,12 @@ export class NewPictrPage {
     let val: string = event.target.value;
 
     if (!!val && val.length) {
+      this.loader.present();
       this.pictr.searchPics(val)
       .subscribe(res => {
         res.unshift(this.fromCameraTile);
         this.results = this.pictr.groupBy(res);
+        this.loader.dismiss();
       });
     } else {
       this.clearResults();
