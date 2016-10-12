@@ -76,4 +76,20 @@ export class NewPictrPage {
   clearResults() {
     this.results = [[this.fromCameraTile]];
   }
+
+  fileSelected(event) {
+    this.loader.present();
+    let file = event.target.files[0];
+    let reader = new FileReader();
+
+    reader.onload = (e:any) => {
+      this.loader.dismiss();
+      this.navCtrl.push(CreatePage, { pic: {
+        link: e.target.result,
+        title: 'Picture just taken'
+      } });
+    }
+
+    reader.readAsDataURL(file);
+  }
 }
