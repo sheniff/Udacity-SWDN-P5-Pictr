@@ -12,7 +12,7 @@ import { Camera } from 'ionic-native';
 })
 export class NewPictrPage {
   public results: Array<Array<ISearchResult>>;
-  public loader;
+  public searching: boolean;
   private fromCameraTile: ISearchResult = {
     link: 'http://shopproject30.com/wp-content/themes/venera/images/placeholder-camera-green.png',
     title: '#pictr#camera#'
@@ -22,11 +22,7 @@ export class NewPictrPage {
     public navCtrl: NavController,
     private pictr: Pictr,
     private loading: LoadingController
-  ) {
-    this.loader = loading.create({
-      content: 'Loading...'
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.pictr.getRandomPics().subscribe(res => {
@@ -42,13 +38,18 @@ export class NewPictrPage {
   search(event) {
     let val: string = event.target.value;
 
+    if (this.searching) return;
+
     if (!!val && val.length) {
-      this.loader.present();
+      let loader = this.loading.create({ content: 'Loading...' });
+      loader.present();
+      this.searching = true;
       this.pictr.searchPics(val)
       .subscribe(res => {
         res.unshift(this.fromCameraTile);
         this.results = this.pictr.groupBy(res);
-        this.loader.dismiss();
+        this.searching = false;
+        loader.dismiss();
       });
     } else {
       this.clearResults();
@@ -74,12 +75,16 @@ export class NewPictrPage {
   }
 
   fileSelected(event) {
-    this.loader.present();
+    let loader = this.loading.create({
+      content: 'Loading...'
+    });
+
+    loader.present();
     let file = event.target.files[0];
     let reader = new FileReader();
 
     reader.onload = (e:any) => {
-      this.loader.dismiss();
+      loader.dismiss();
       this.navCtrl.push(CreatePage, { pic: {
         link: e.target.result,
         title: 'Picture just taken'
