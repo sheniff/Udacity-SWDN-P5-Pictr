@@ -8,12 +8,12 @@
   <ion-list>
     <ion-item *ngFor="let entry of timeline" text-wrap>
       <ion-avatar item-left>
-        <img src="{{entry.creator.avatar}}">
+        <img src="{{entry.creator.avatar}}" alt="{{entry.creator.name}}'s avatar">
       </ion-avatar>
       <h2>{{entry.creator.name}}</h2>
       <p>{{entry.action}} @ {{entry.createdAt | date}}</p>
       <ion-avatar item-right>
-        <img src="{{entry.post.link}}">
+        <img src="{{entry.post.link}}" alt="{{entry.post.title}}">
       </ion-avatar>
     </ion-item>
   </ion-list>

@@ -9185,5 +9185,22 @@ body {
   font-size: 1.4rem;
   background-color: #fff; }
 
+img {
+  width: 100%;
+  background-color: gainsboro; }
+
+.newPictr .fileSelector {
+  position: relative; }
+  .newPictr .fileSelector input[type="file"] {
+    left: 0;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    opacity: 0; }
+
 .profile-page .profile-img:before {
   content: "Tap here to take new picture"; }
+
+.detail .detail-picture-comment {
+  padding: 0 20px; }

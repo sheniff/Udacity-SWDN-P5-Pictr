@@ -9,7 +9,8 @@
 <ion-content class="newPictr">
   <ion-grid>
     <ion-row *ngFor="let set of results">
-      <ion-col width-33>
+      <ion-col width-33 class="fileSelector">
+        <input type="file" (change)="fileSelected($event)">
         <img (click)="onPicSelected($event, set[0])" src="{{set[0].link}}" alt="{{set[0].title}}" />
       </ion-col>
       <ion-col width-33 *ngFor="let res of set.slice(1, 3)">

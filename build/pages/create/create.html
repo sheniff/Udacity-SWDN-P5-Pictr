@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <img src="{{pic.link | imgur:'m'}}" alt="{{pic.name}}" />
+  <img src="{{pic.link | imgur:'m'}}" alt="{{pic.title}}" />
 
   <form class="" (ngSubmit)="savePost(post)">
     <ion-item>
@@ -13,7 +13,7 @@
         <ion-icon name="text"></ion-icon>
         Say something about it...
       </ion-label>
-      <ion-textarea [(ngModel)]="post.message" rows="3" name="message">
+      <ion-textarea [(ngModel)]="post.message" rows="1" name="message">
       </ion-textarea>
     </ion-item>
     <button full>Post it</button>

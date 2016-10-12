@@ -109,6 +109,7 @@ var CreatePage = (function () {
         this.post = {
             createdAt: new Date(),
             link: this.pic.link,
+            title: this.pic.title,
             message: '',
             creator: this.pictr.getCurrentUser()
         };
@@ -147,9 +148,11 @@ var DetailPage = (function () {
         this.navParams = navParams;
         this.pictr = pictr;
         this.post = this.navParams.get('post');
+        this.triedToSubmit = false;
     }
     DetailPage.prototype.comment = function (event, message) {
         event.preventDefault();
+        this.triedToSubmit = true;
         if (!message || !message.length) {
             return;
         }
@@ -162,6 +165,7 @@ var DetailPage = (function () {
             createdAt: new Date()
         });
         this.newComment = '';
+        this.triedToSubmit = false;
     };
     DetailPage = __decorate([
         core_1.Component({
@@ -194,15 +198,19 @@ var pictr_1 = require('../../providers/pictr/pictr');
 var imgurResize_1 = require('../../pipes/imgurResize');
 var ionic_native_1 = require('ionic-native');
 var NewPictrPage = (function () {
-    function NewPictrPage(navCtrl, pictr) {
+    function NewPictrPage(navCtrl, pictr, loading) {
         this.navCtrl = navCtrl;
         this.pictr = pictr;
+        this.loading = loading;
         this.fromCameraTile = {
             link: 'http://shopproject30.com/wp-content/themes/venera/images/placeholder-camera-green.png',
             title: '#pictr#camera#'
         };
+        this.loader = loading.create({
+            content: 'Loading...'
+        });
     }
-    NewPictrPage.prototype.ionViewWillEnter = function () {
+    NewPictrPage.prototype.ngOnInit = function () {
         var _this = this;
         this.pictr.getRandomPics().subscribe(function (res) {
             res.unshift(_this.fromCameraTile);
@@ -221,10 +229,12 @@ var NewPictrPage = (function () {
         var _this = this;
         var val = event.target.value;
         if (!!val && val.length) {
+            this.loader.present();
             this.pictr.searchPics(val)
                 .subscribe(function (res) {
                 res.unshift(_this.fromCameraTile);
                 _this.results = _this.pictr.groupBy(res);
+                _this.loader.dismiss();
             });
         }
         else {
@@ -248,13 +258,27 @@ var NewPictrPage = (function () {
     NewPictrPage.prototype.clearResults = function () {
         this.results = [[this.fromCameraTile]];
     };
+    NewPictrPage.prototype.fileSelected = function (event) {
+        var _this = this;
+        this.loader.present();
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            _this.loader.dismiss();
+            _this.navCtrl.push(create_1.CreatePage, { pic: {
+                    link: e.target.result,
+                    title: 'Picture just taken'
+                } });
+        };
+        reader.readAsDataURL(file);
+    };
     NewPictrPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/new/new.html',
             providers: [pictr_1.Pictr],
             pipes: [imgurResize_1.ImgurResize]
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, pictr_1.Pictr])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, pictr_1.Pictr, ionic_angular_1.LoadingController])
     ], NewPictrPage);
     return NewPictrPage;
 }());
@@ -456,6 +480,7 @@ exports.mockComments = [
 exports.mockPosts = [
     {
         createdAt: new Date(),
+        title: 'my hedgehog',
         link: 'http://i.imgur.com/0F374vh.jpg',
         message: 'Awww cutieeeee!! :DDD <3 <3 <3',
         creator: exports.mockUsers[0],
@@ -506,7 +531,7 @@ var Pictr = (function () {
         return this.http
             .get("https://api.imgur.com/3/gallery/search?q_any=" + q + "&q_type=png&q_size_px=med", { headers: headers })
             .map(function (res) {
-            return res.json().data.map(function (res) {
+            return res.json().data.slice(0, 21).map(function (res) {
                 return { link: res.link, title: res.title };
             });
         });
@@ -518,7 +543,7 @@ var Pictr = (function () {
         return this.http
             .get("https://api.imgur.com/3/gallery/random/random", { headers: headers })
             .map(function (res) {
-            return res.json().data
+            return res.json().data.slice(0, 21)
                 .map(function (res) {
                 return { link: res.link, title: res.title };
             })
