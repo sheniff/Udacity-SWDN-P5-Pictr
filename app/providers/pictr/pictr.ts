@@ -45,11 +45,19 @@ export class Pictr {
   private user: IUser;
   private posts: Array<IPost>;
   private timeline: Array<ITimelineEntry>;
+  private dbPromise: any;
 
   constructor(private http: Http) {
     this.user = mockUsers[0];
     this.posts = mockPosts;
     this.timeline = mockTimeline;
+
+    // testing IDB
+    this.dbPromise = (<any> window).idb.open('test-db', 1, function(upgradeDb) {
+      var keyValStore = upgradeDb.createObjectStore('keyval');
+      keyValStore.put('world', 'hello');
+      console.log('test db crap created!');
+    });
   }
 
   searchPics(q: string) {
