@@ -25,10 +25,15 @@ export class NewPictrPage {
   ) {}
 
   ngOnInit() {
-    this.pictr.getRandomPics().subscribe(res => {
+    this.pictr.getCachedRandom().then(res => {
       res.unshift(this.fromCameraTile);
       this.results = this.pictr.groupBy(res);
     });
+
+    // this.pictr.getRandomPics().subscribe(res => {
+    //   res.unshift(this.fromCameraTile);
+    //   this.results = this.pictr.groupBy(res);
+    // });
   }
 
   onPicSelected(event, pic) {

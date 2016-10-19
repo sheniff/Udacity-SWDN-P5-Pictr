@@ -52,11 +52,11 @@ export class Pictr {
     this.posts = mockPosts;
     this.timeline = mockTimeline;
 
-    // testing IDB
-    this.dbPromise = (<any> window).idb.open('test-db', 1, function(upgradeDb) {
-      var keyValStore = upgradeDb.createObjectStore('keyval');
-      keyValStore.put('world', 'hello');
-      console.log('test db crap created!');
+    // cache IDB
+    this.dbPromise = (<any> window).idb.open('pictr', 1, function(upgradeDb) {
+      upgradeDb.createObjectStore('randomResults', {
+        keyPath: 'id'
+      });
     });
   }
 
@@ -75,21 +75,27 @@ export class Pictr {
   }
 
   getRandomPics() {
-    let regx = /\.(jpg|png|gif)$/;
     let headers = new Headers();
     headers.append('Authorization', AUTH);
 
     return this.http
       .get(`https://api.imgur.com/3/gallery/random/random`,
       { headers })
-      .map(res =>
-        res.json().data
-          .map(res => {
-            return { link: res.link, title: res.title }
-          })
-          .filter(res => res.link.match(regx))
-          .slice(0, 20)
-      );
+      .map(res => {
+        let data = res.json().data
+        this.cacheRandomResults(data)
+        return this.processRandomResults(data)
+      });
+  }
+
+  processRandomResults(data) {
+    const regx = /\.(jpg|png|gif)$/
+
+    return data.map(res => {
+      return { link: res.link, title: res.title }
+    })
+    .filter(res => res.link.match(regx))
+    .slice(0, 20)
   }
 
   getCurrentUser(): IUser {
@@ -122,5 +128,25 @@ export class Pictr {
     });
 
     return response;
+  }
+
+  getCachedRandom() {
+    return this.dbPromise.then(db => {
+      if (!db) return [];
+      return db
+        .transaction('randomResults')
+        .objectStore('randomResults')
+        .getAll()
+        .then(data => this.processRandomResults(data))
+    })
+  }
+
+  cacheRandomResults(data: Array<any>) {
+    this.dbPromise.then(db => {
+      if (!db) return;
+      let tx = db.transaction('randomResults', 'readwrite')
+      let store = tx.objectStore('randomResults')
+      data.forEach(res => store.put(res))
+    })
   }
 }
