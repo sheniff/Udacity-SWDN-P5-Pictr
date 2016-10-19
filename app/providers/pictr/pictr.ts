@@ -149,7 +149,7 @@ export class Pictr {
       // store new response
       data.forEach(res => store.put(res))
       // clear previous cache
-      store.openCursor(null, 'prev')
+      store.openCursor()
       .then(cursor => cursor.advance(50))
       .then(function clearAll(cursor) {
         if (!cursor) return;
