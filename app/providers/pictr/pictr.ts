@@ -146,7 +146,16 @@ export class Pictr {
       if (!db) return;
       let tx = db.transaction('randomResults', 'readwrite')
       let store = tx.objectStore('randomResults')
+      // store new response
       data.forEach(res => store.put(res))
+      // clear previous cache
+      store.openCursor(null, 'prev')
+      .then(cursor => cursor.advance(50))
+      .then(function clearAll(cursor) {
+        if (!cursor) return;
+        cursor.delete();
+        return cursor.continue().then(clearAll);
+      })
     })
   }
 }
