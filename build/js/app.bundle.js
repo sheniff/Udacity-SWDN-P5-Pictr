@@ -203,38 +203,39 @@ var NewPictrPage = (function () {
         this.pictr = pictr;
         this.loading = loading;
         this.fromCameraTile = {
-            link: 'http://shopproject30.com/wp-content/themes/venera/images/placeholder-camera-green.png',
+            link: 'img/camera.png',
             title: '#pictr#camera#'
         };
-        this.loader = loading.create({
-            content: 'Loading...'
-        });
     }
     NewPictrPage.prototype.ngOnInit = function () {
         var _this = this;
+        this.pictr.getCachedRandom().then(function (res) {
+            res.unshift(_this.fromCameraTile);
+            _this.results = _this.pictr.groupBy(res);
+        });
         this.pictr.getRandomPics().subscribe(function (res) {
             res.unshift(_this.fromCameraTile);
             _this.results = _this.pictr.groupBy(res);
         });
     };
     NewPictrPage.prototype.onPicSelected = function (event, pic) {
-        if (pic.title === this.fromCameraTile.title) {
-            this.getFromCamera();
-        }
-        else {
-            this.navCtrl.push(create_1.CreatePage, { pic: pic });
-        }
+        this.navCtrl.push(create_1.CreatePage, { pic: pic });
     };
     NewPictrPage.prototype.search = function (event) {
         var _this = this;
         var val = event.target.value;
+        if (this.searching)
+            return;
         if (!!val && val.length) {
-            this.loader.present();
+            var loader_1 = this.loading.create({ content: 'Loading...' });
+            loader_1.present();
+            this.searching = true;
             this.pictr.searchPics(val)
                 .subscribe(function (res) {
                 res.unshift(_this.fromCameraTile);
                 _this.results = _this.pictr.groupBy(res);
-                _this.loader.dismiss();
+                _this.searching = false;
+                loader_1.dismiss();
             });
         }
         else {
@@ -260,11 +261,14 @@ var NewPictrPage = (function () {
     };
     NewPictrPage.prototype.fileSelected = function (event) {
         var _this = this;
-        this.loader.present();
+        var loader = this.loading.create({
+            content: 'Loading...'
+        });
+        loader.present();
         var file = event.target.files[0];
         var reader = new FileReader();
         reader.onload = function (e) {
-            _this.loader.dismiss();
+            loader.dismiss();
             _this.navCtrl.push(create_1.CreatePage, { pic: {
                     link: e.target.result,
                     title: 'Picture just taken'
@@ -524,6 +528,12 @@ var Pictr = (function () {
         this.user = mocks_1.mockUsers[0];
         this.posts = mocks_1.mockPosts;
         this.timeline = mocks_1.mockTimeline;
+        // cache IDB
+        this.dbPromise = window.idb.open('pictr', 1, function (upgradeDb) {
+            upgradeDb.createObjectStore('randomResults', {
+                keyPath: 'id'
+            });
+        });
     }
     Pictr.prototype.searchPics = function (q) {
         var headers = new http_1.Headers();
@@ -531,24 +541,30 @@ var Pictr = (function () {
         return this.http
             .get("https://api.imgur.com/3/gallery/search?q_any=" + q + "&q_type=png&q_size_px=med", { headers: headers })
             .map(function (res) {
-            return res.json().data.slice(0, 21).map(function (res) {
+            return res.json().data.slice(0, 20).map(function (res) {
                 return { link: res.link, title: res.title };
             });
         });
     };
     Pictr.prototype.getRandomPics = function () {
-        var regx = /\.(jpg|png|gif)$/;
+        var _this = this;
         var headers = new http_1.Headers();
         headers.append('Authorization', AUTH);
         return this.http
             .get("https://api.imgur.com/3/gallery/random/random", { headers: headers })
             .map(function (res) {
-            return res.json().data.slice(0, 21)
-                .map(function (res) {
-                return { link: res.link, title: res.title };
-            })
-                .filter(function (res) { return res.link.match(regx); });
+            var data = res.json().data;
+            _this.cacheRandomResults(data);
+            return _this.processRandomResults(data);
         });
+    };
+    Pictr.prototype.processRandomResults = function (data) {
+        var regx = /\.(jpg|png|gif)$/;
+        return data.map(function (res) {
+            return { link: res.link, title: res.title };
+        })
+            .filter(function (res) { return res.link.match(regx); })
+            .slice(0, 20);
     };
     Pictr.prototype.getCurrentUser = function () {
         return this.user;
@@ -575,6 +591,37 @@ var Pictr = (function () {
             block.push(res);
         });
         return response;
+    };
+    Pictr.prototype.getCachedRandom = function () {
+        var _this = this;
+        return this.dbPromise.then(function (db) {
+            if (!db)
+                return [];
+            return db
+                .transaction('randomResults')
+                .objectStore('randomResults')
+                .getAll()
+                .then(function (data) { return _this.processRandomResults(data); });
+        });
+    };
+    Pictr.prototype.cacheRandomResults = function (data) {
+        this.dbPromise.then(function (db) {
+            if (!db)
+                return;
+            var tx = db.transaction('randomResults', 'readwrite');
+            var store = tx.objectStore('randomResults');
+            // store new response
+            data.forEach(function (res) { return store.put(res); });
+            // clear previous cache
+            store.openCursor()
+                .then(function (cursor) { return cursor.advance(50); })
+                .then(function clearAll(cursor) {
+                if (!cursor)
+                    return;
+                cursor.delete();
+                return cursor.continue().then(clearAll);
+            });
+        });
     };
     Pictr = __decorate([
         core_1.Injectable(), 
