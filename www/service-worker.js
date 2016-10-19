@@ -2,7 +2,7 @@ var contentImgsCache = 'pictr-content-imgs';
 
 function servePhoto(req) {
   var storageUrl = req.url;
-  caches.open(contentImgsCache).then(function(cache) {
+  return caches.open(contentImgsCache).then(function(cache) {
     return cache.match(storageUrl).then(function (res) {
       if (res) return res;
 
@@ -32,11 +32,11 @@ self.addEventListener('activate', function (event) {
   );
 });
 
-// self.addEventListener('fetch', function (event) {
-//   var requestUrl = new URL(event.request.url);
-//
-//   if(requestUrl.host === 'i.imgur.com') {
-//     event.respondWith(servePhoto(event.request));
-//     return;
-//   }
-// });
+self.addEventListener('fetch', function (event) {
+  var requestUrl = new URL(event.request.url);
+
+  if(requestUrl.host === 'i.imgur.com') {
+    event.respondWith(servePhoto(event.request));
+    return;
+  }
+});

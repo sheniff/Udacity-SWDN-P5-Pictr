@@ -14,7 +14,7 @@ export class NewPictrPage {
   public results: Array<Array<ISearchResult>>;
   public searching: boolean;
   private fromCameraTile: ISearchResult = {
-    link: 'http://shopproject30.com/wp-content/themes/venera/images/placeholder-camera-green.png',
+    link: 'img/camera.png',
     title: '#pictr#camera#'
   };
 

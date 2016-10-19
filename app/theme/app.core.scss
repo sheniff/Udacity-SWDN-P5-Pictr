@@ -3,6 +3,12 @@
 img {
   width: 100%;
   background-color: gainsboro;
+  transition: .5s opacity;
+
+  &:hover,
+  &:focus {
+    opacity: 0.3;
+  }
 }
 
 // App Shared Imports
