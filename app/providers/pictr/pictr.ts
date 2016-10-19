@@ -92,7 +92,7 @@ export class Pictr {
     const regx = /\.(jpg|png|gif)$/
 
     return data.map(res => {
-      return { link: res.link, title: res.title }
+      return { link: res.link.replace('http:', 'https:'), title: res.title }
     })
     .filter(res => res.link.match(regx))
     .slice(0, 20)
