@@ -424,6 +424,9 @@ var TabsPage = (function () {
     };
     TabsPage.prototype.runOfflineDetector = function () {
         var _this = this;
+        if (navigator.onLine === false) {
+            this.presentToast('Network not available', 'top');
+        }
         window.addEventListener('offline', function () {
             _this.presentToast('Network not available', 'top');
         });
