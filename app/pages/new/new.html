@@ -8,6 +8,9 @@
 </ion-header>
 
 <ion-content class="newPictr">
+  <div class="banner" *ngIf="!!coords">
+    You're posting from {{ location }} ({{ coords.latitude }} {{ coords.longitude }}).
+  </div>
   <ion-grid *ngIf="results && results.length">
     <ion-row>
       <ion-col width-33 class="fileSelector">

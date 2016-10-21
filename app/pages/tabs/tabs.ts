@@ -33,7 +33,7 @@ export class TabsPage {
 
   private runOfflineDetector() {
     window.addEventListener('offline', () => {
-      this.presentToast('Network not available')
+      this.presentToast('Network not available', 'top')
     })
 
     window.addEventListener('online', () => {
@@ -41,10 +41,10 @@ export class TabsPage {
     })
   }
 
-  private presentToast(message: string) {
+  private presentToast(message: string, position: string = 'top') {
     this.toast = this.toastCtrl.create({
       message: message,
-      position: 'top',
+      position: position,
       showCloseButton: true,
       closeButtonText: 'Ok'
     })

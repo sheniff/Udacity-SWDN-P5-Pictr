@@ -3,7 +3,7 @@ import { NavController, NavParams, LoadingController, ToastController } from 'io
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
 import { ImgurResize } from '../../pipes/imgurResize';
-import { Camera } from 'ionic-native';
+import { Camera, Geolocation } from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/new/new.html',
@@ -17,6 +17,8 @@ export class NewPictrPage {
     link: 'img/camera.png',
     title: '#pictr#camera#'
   };
+  public coords;
+  public location;
   @ViewChild('searchbar') searchbar: any;
 
   constructor(
@@ -34,6 +36,8 @@ export class NewPictrPage {
     this.pictr.getRandomPics().subscribe(
       res => this.alertNewContent(res)
     );
+
+    this.runGeolocation();
   }
 
   ionViewDidEnter() {
@@ -119,6 +123,32 @@ export class NewPictrPage {
     toast.present().then(() => {
       let btn = <any>document.querySelector('button.toast-button');
       btn.focus();
+    })
+  }
+
+  private runGeolocation() {
+    Geolocation.getCurrentPosition().then((resp) => {
+      this.coords = resp.coords;
+      this.pictr.getGeolocation(
+        this.coords.latitude,
+        this.coords.longitude
+      ).subscribe(data => this.location = data);;
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+
+    let watch = Geolocation.watchPosition();
+    watch.subscribe((data) => {
+      if (data.coords && this.coords &&
+        Math.abs(data.coords.latitude - this.coords.latitude) > 0.0000001 &&
+        Math.abs(data.coords.longitude - this.coords.longitude) > 0.0000001
+      ) {
+        this.coords = data.coords;
+        this.pictr.getGeolocation(
+          this.coords.latitude,
+          this.coords.longitude
+        ).subscribe(data => this.location = data);
+      }
     })
   }
 }

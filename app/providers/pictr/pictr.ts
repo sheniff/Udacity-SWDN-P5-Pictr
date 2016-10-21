@@ -158,4 +158,14 @@ export class Pictr {
       })
     })
   }
+
+  getGeolocation(lat: number, long: number) {
+    return this.http
+    .get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&sensor=true&result_type=locality&key=AIzaSyAH2Ewr1_Ho_J9bzZfYNGONAgeSYsIoR08`)
+    .map(data => data.json())
+    .map((data: any) => {
+      if (!data.results.length) return '';
+      return data.results[0].formatted_address;
+    });
+  }
 }
