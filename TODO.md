@@ -1,4 +1,3 @@
-* Show toast while loading or when no connection detected
 * Manage focus
 
 # Rubric

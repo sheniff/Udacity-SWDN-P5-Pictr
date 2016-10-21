@@ -10,7 +10,7 @@
   ],
   "handleFetch": true,
   "stripPrefix": "www/",
-  "cacheId": "pictr-v1.12",
+  "cacheId": "pictr-v1.14",
   "maximumFileSizeToCacheInBytes": 4194304,
   "ignoreUrlParametersMatching": "[/./]",
   "verbose": true,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
 import { ImgurResize } from '../../pipes/imgurResize';
@@ -13,7 +13,7 @@ import { Camera } from 'ionic-native';
 export class NewPictrPage {
   public results: Array<Array<ISearchResult>>;
   public searching: boolean;
-  private fromCameraTile: ISearchResult = {
+  public fromCameraTile: ISearchResult = {
     link: 'img/camera.png',
     title: '#pictr#camera#'
   };
@@ -21,19 +21,18 @@ export class NewPictrPage {
   constructor(
     public navCtrl: NavController,
     private pictr: Pictr,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
     this.pictr.getCachedRandom().then(res => {
-      res.unshift(this.fromCameraTile);
       this.results = this.pictr.groupBy(res);
     });
 
-    this.pictr.getRandomPics().subscribe(res => {
-      res.unshift(this.fromCameraTile);
-      this.results = this.pictr.groupBy(res);
-    });
+    this.pictr.getRandomPics().subscribe(
+      res => this.alertNewContent(res)
+    );
   }
 
   onPicSelected(event, pic) {
@@ -97,5 +96,21 @@ export class NewPictrPage {
     }
 
     reader.readAsDataURL(file);
+  }
+
+  alertNewContent(content) {
+    let toast = this.toastCtrl.create({
+      message: 'There are new imgs!',
+      position: 'middle',
+      showCloseButton: true,
+      closeButtonText: 'Refresh',
+      dismissOnPageChange: true
+    })
+
+    toast.onDidDismiss(() => {
+      this.results = this.pictr.groupBy(content)
+    })
+
+    toast.present()
   }
 }

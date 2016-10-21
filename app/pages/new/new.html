@@ -11,7 +11,7 @@
     <ion-row>
       <ion-col width-33 class="fileSelector">
         <input type="file" (change)="fileSelected($event)">
-        <img class="feedbackable" (click)="onPicSelected($event, results[0][0])" src="{{results[0][0].link}}" alt="{{results[0][0].title}}" />
+        <img class="feedbackable" (click)="onPicSelected($event, fromCameraTile)" src="{{fromCameraTile.link}}" alt="{{fromCameraTile.title}}" />
       </ion-col>
       <ion-col width-33 *ngFor="let res of results[0].slice(1, 3)">
         <img class="feedbackable" (click)="onPicSelected($event, res)" src="{{res.link | imgur:'s'}}" alt="{{res.title}}" />
