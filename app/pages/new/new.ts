@@ -34,7 +34,13 @@ export class NewPictrPage {
     });
 
     this.pictr.getRandomPics().subscribe(
-      res => this.alertNewContent(res)
+      res => {
+        if (!!this.results && this.results.length) {
+          this.alertNewContent(res);
+        } else {
+          this.results = this.pictr.groupBy(res);
+        }
+      }
     );
 
     this.runGeolocation();
