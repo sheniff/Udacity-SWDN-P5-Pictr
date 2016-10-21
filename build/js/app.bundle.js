@@ -100,6 +100,9 @@ var CreatePage = (function () {
     CreatePage.prototype.ionViewWillEnter = function () {
         this.initPost();
     };
+    CreatePage.prototype.ionViewDidEnter = function () {
+        this.message.setFocus();
+    };
     CreatePage.prototype.savePost = function (post) {
         this.pictr.storePost(post);
         this.navCtrl.push(detail_1.DetailPage, { post: post });
@@ -114,6 +117,10 @@ var CreatePage = (function () {
             creator: this.pictr.getCurrentUser()
         };
     };
+    __decorate([
+        core_1.ViewChild('message'), 
+        __metadata('design:type', Object)
+    ], CreatePage.prototype, "message", void 0);
     CreatePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/create/create.html',
@@ -198,10 +205,11 @@ var pictr_1 = require('../../providers/pictr/pictr');
 var imgurResize_1 = require('../../pipes/imgurResize');
 var ionic_native_1 = require('ionic-native');
 var NewPictrPage = (function () {
-    function NewPictrPage(navCtrl, pictr, loading) {
+    function NewPictrPage(navCtrl, pictr, loading, toastCtrl) {
         this.navCtrl = navCtrl;
         this.pictr = pictr;
         this.loading = loading;
+        this.toastCtrl = toastCtrl;
         this.fromCameraTile = {
             link: 'img/camera.png',
             title: '#pictr#camera#'
@@ -210,13 +218,20 @@ var NewPictrPage = (function () {
     NewPictrPage.prototype.ngOnInit = function () {
         var _this = this;
         this.pictr.getCachedRandom().then(function (res) {
-            res.unshift(_this.fromCameraTile);
             _this.results = _this.pictr.groupBy(res);
         });
         this.pictr.getRandomPics().subscribe(function (res) {
-            res.unshift(_this.fromCameraTile);
-            _this.results = _this.pictr.groupBy(res);
+            if (!!_this.results && _this.results.length) {
+                _this.alertNewContent(res);
+            }
+            else {
+                _this.results = _this.pictr.groupBy(res);
+            }
         });
+        this.runGeolocation();
+    };
+    NewPictrPage.prototype.ionViewDidEnter = function () {
+        this.searchbar.setFocus();
     };
     NewPictrPage.prototype.onPicSelected = function (event, pic) {
         this.navCtrl.push(create_1.CreatePage, { pic: pic });
@@ -276,13 +291,53 @@ var NewPictrPage = (function () {
         };
         reader.readAsDataURL(file);
     };
+    NewPictrPage.prototype.alertNewContent = function (content) {
+        var _this = this;
+        var toast = this.toastCtrl.create({
+            message: 'There are new imgs!',
+            position: 'middle',
+            showCloseButton: true,
+            closeButtonText: 'Refresh',
+            dismissOnPageChange: true
+        });
+        toast.onDidDismiss(function () {
+            _this.results = _this.pictr.groupBy(content);
+        });
+        toast.present().then(function () {
+            var btn = document.querySelector('button.toast-button');
+            btn.focus();
+        });
+    };
+    NewPictrPage.prototype.runGeolocation = function () {
+        var _this = this;
+        ionic_native_1.Geolocation.getCurrentPosition().then(function (resp) {
+            _this.coords = resp.coords;
+            _this.pictr.getGeolocation(_this.coords.latitude, _this.coords.longitude).subscribe(function (data) { return _this.location = data; });
+            ;
+        }).catch(function (error) {
+            console.log('Error getting location', error);
+        });
+        var watch = ionic_native_1.Geolocation.watchPosition();
+        watch.subscribe(function (data) {
+            if (data.coords && _this.coords &&
+                Math.abs(data.coords.latitude - _this.coords.latitude) > 0.0000001 &&
+                Math.abs(data.coords.longitude - _this.coords.longitude) > 0.0000001) {
+                _this.coords = data.coords;
+                _this.pictr.getGeolocation(_this.coords.latitude, _this.coords.longitude).subscribe(function (data) { return _this.location = data; });
+            }
+        });
+    };
+    __decorate([
+        core_1.ViewChild('searchbar'), 
+        __metadata('design:type', Object)
+    ], NewPictrPage.prototype, "searchbar", void 0);
     NewPictrPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/new/new.html',
             providers: [pictr_1.Pictr],
             pipes: [imgurResize_1.ImgurResize]
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, pictr_1.Pictr, ionic_angular_1.LoadingController])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, pictr_1.Pictr, ionic_angular_1.LoadingController, ionic_angular_1.ToastController])
     ], NewPictrPage);
     return NewPictrPage;
 }());
@@ -353,8 +408,10 @@ var new_1 = require('../new/new');
 var album_1 = require('../album/album');
 var profile_1 = require('../profile/profile');
 var timeline_1 = require('../timeline/timeline');
+var ionic_angular_1 = require('ionic-angular');
 var TabsPage = (function () {
-    function TabsPage() {
+    function TabsPage(toastCtrl) {
+        this.toastCtrl = toastCtrl;
         // this tells the tabs component which Pages
         // should be each tab's root Page
         this.tab1Root = new_1.NewPictrPage;
@@ -362,17 +419,44 @@ var TabsPage = (function () {
         this.tab3Root = timeline_1.TimelinePage;
         this.tab4Root = profile_1.ProfilePage;
     }
+    TabsPage.prototype.ionViewWillEnter = function () {
+        this.runOfflineDetector();
+    };
+    TabsPage.prototype.runOfflineDetector = function () {
+        var _this = this;
+        window.addEventListener('offline', function () {
+            _this.presentToast('Network not available', 'top');
+        });
+        window.addEventListener('online', function () {
+            _this.dismissToast();
+        });
+    };
+    TabsPage.prototype.presentToast = function (message, position) {
+        if (position === void 0) { position = 'top'; }
+        this.toast = this.toastCtrl.create({
+            message: message,
+            position: position,
+            showCloseButton: true,
+            closeButtonText: 'Ok'
+        });
+        this.toast.present();
+    };
+    TabsPage.prototype.dismissToast = function () {
+        if (this.toast) {
+            this.toast.dismiss();
+        }
+    };
     TabsPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/tabs/tabs.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [ionic_angular_1.ToastController])
     ], TabsPage);
     return TabsPage;
 }());
 exports.TabsPage = TabsPage;
 
-},{"../album/album":2,"../new/new":5,"../profile/profile":6,"../timeline/timeline":8,"@angular/core":159}],8:[function(require,module,exports){
+},{"../album/album":2,"../new/new":5,"../profile/profile":6,"../timeline/timeline":8,"@angular/core":159,"ionic-angular":473}],8:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -425,6 +509,9 @@ var ImgurResize = (function () {
       Takes a Imgur image and edits the URL to fetch a different size of it.
      */
     ImgurResize.prototype.transform = function (value, args) {
+        if (window.innerWidth > 600) {
+            return value;
+        }
         var res = value.split('.');
         if (res[res.length - 1] !== 'gif') {
             res[res.length - 2] += args[0];
@@ -541,7 +628,7 @@ var Pictr = (function () {
         return this.http
             .get("https://api.imgur.com/3/gallery/search?q_any=" + q + "&q_type=png&q_size_px=med", { headers: headers })
             .map(function (res) {
-            return res.json().data.slice(0, 20).map(function (res) {
+            return res.json().data.slice(0, 21).map(function (res) {
                 return { link: res.link, title: res.title };
             });
         });
@@ -564,7 +651,7 @@ var Pictr = (function () {
             return { link: res.link.replace('http:', 'https:'), title: res.title };
         })
             .filter(function (res) { return res.link.match(regx); })
-            .slice(0, 20);
+            .slice(0, 21);
     };
     Pictr.prototype.getCurrentUser = function () {
         return this.user;
@@ -621,6 +708,16 @@ var Pictr = (function () {
                 cursor.delete();
                 return cursor.continue().then(clearAll);
             });
+        });
+    };
+    Pictr.prototype.getGeolocation = function (lat, long) {
+        return this.http
+            .get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&sensor=true&result_type=locality&key=AIzaSyAH2Ewr1_Ho_J9bzZfYNGONAgeSYsIoR08")
+            .map(function (data) { return data.json(); })
+            .map(function (data) {
+            if (!data.results.length)
+                return '';
+            return data.results[0].formatted_address;
         });
     };
     Pictr = __decorate([

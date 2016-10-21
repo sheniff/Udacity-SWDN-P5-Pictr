@@ -9187,11 +9187,15 @@ body {
 
 img {
   width: 100%;
-  background-color: gainsboro;
-  -webkit-transition: .5s opacity;
-  transition: .5s opacity; }
-  img:hover, img:focus {
-    opacity: 0.3; }
+  background-color: gainsboro; }
+  img.feedbackable {
+    -webkit-transition: .5s opacity;
+    transition: .5s opacity; }
+    img.feedbackable:hover {
+      opacity: 0.3; }
+
+.toast-button:focus {
+  outline: 3px solid; }
 
 .newPictr .fileSelector {
   position: relative; }
@@ -9203,8 +9207,33 @@ img {
     bottom: 0;
     opacity: 0; }
 
+.newPictr a:focus {
+  outline: 3px solid blue;
+  opacity: 0.7; }
+
+.newPictr input:focus {
+  background-color: white;
+  opacity: 0.5 !important;
+  margin-top: -30px;
+  outline: 3px solid blue; }
+
+.newPictr .banner {
+  padding: 10px;
+  background-color: blue;
+  color: white;
+  font-weight: bold; }
+
 .profile-page .profile-img:before {
   content: "Tap here to take new picture"; }
 
 .detail .detail-picture-comment {
   padding: 0 20px; }
+
+.detail .image {
+  text-align: center; }
+  .detail .image img {
+    max-width: 600px; }
+
+.album a:focus {
+  outline: 3px solid blue;
+  opacity: 0.7; }
