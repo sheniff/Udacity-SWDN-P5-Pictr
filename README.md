@@ -8,6 +8,8 @@
 
 ### [Live demo](https://sheniff.github.io/Udacity-SWDN-P5-Pictr)
 
+![pictr](https://cloud.githubusercontent.com/assets/1939291/19603739/7de27c1e-97b2-11e6-93a2-999089faaa7a.gif)
+
 ### Features
 - [x] **Responsive Design:** App is equally functional on mobile and desktop, using responsive design to ensure its displayed in a useable state.
 - [x] **Input Design:** All form inputs have appropriate types, labels, placeholders, and immediately validated.
