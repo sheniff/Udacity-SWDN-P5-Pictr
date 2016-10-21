@@ -1,27 +1,26 @@
-# Project 4 : Corporate Dashboard App
+# Project 5 : Pictr - Find and share pics (Cap Project)
 ## Udacity : Senior Web Developer Nanodegree
 
 ### How to run it
-`$> npm i` to install all dependencies and libraries via bower (automatically run as postinstall dependency)
+`$> npm i` to install all dependencies and libraries
 
-`$> npm run serve` command compiles app locally and runs a local server
+`$> ionic serve` command runs a local server and serves the app in `http://localhost:8100`
 
-If you're using Mac OSX or Linux, you can do `open http://localhost:3000` to directly open a browser with the local app or just [go and open it manually by clicking here](http://localhost:3000).
-
-### [Live demo](https://sheniff.github.io/Udacity-SWDN-P4-DashboardApp/)
+### [Live demo](https://sheniff.github.io/Udacity-SWDN-P5-Pictr)
 
 ### Features
-* [x] Completion: App includes all requirements, including header, menu, and all dashboard views.
-* [x] Responsiveness: Is responsive. Based on Bootstrap and Gentelella for a better looking.
-* [x] Component Design: Uses AngularJS as a JS framework to separate data visualization from data itself. Coded in Typescript for the joy of developers and reviewers :D
-* [x] Data Formats: All data is fetched externally using AngularJS' `$http` service pointing to fake JSON/CSV endpoints living in an AWS S3 bucket.
-* [x] Near Real-Time Updates: Some widgets (like `reported issues` and `paying customers` charts) have been provided with real-time data polling as an example that the app can refresh data automatically without having to refresh the page.
-* [x] Build process. It uses Grunt to build the app as requested.
+- [x] **Responsive Design:** App is equally functional on mobile and desktop, using responsive design to ensure its displayed in a useable state.
+- [x] **Input Design:** All form inputs have appropriate types, labels, placeholders, and immediately validated.
+- [x] **Implement Offline Functionality:** Application defaults to offline-first functionality, functioning if a network connection does not exist.
+- [x] **Meets Accessibility Standards:** All images have alternative text, focus is appropriately managed, elements are semantically used appropriately. When semantic elements are not used, ARIA roles are properly applied. Colors and contrast are managed.
+- [x] **Component Use and Design:** If components are used, they are self-contained units of functionality and declaratively configurable.
+- [x] **Home Screen Installable:** The application is installable to user’s home screen.
+- [x] **Built for the Progressive Web:** Application uses native features, like push notifications, Bluetooth, geolocation, as appropriate for the application.
+- [x] **App Delivery:** App includes a build process (such as Grunt or Gulp). Assets are minimized and concatenated as appropriate.
 
 ### Libraries and technologies I used
+* `Ionic Framework` (to ease mobile-friendly app creation)
 * `Gulp + plugins` (for task automation)
-* `AngularJS` with `Typescript`
-* `Highcharts + Highmaps` as chart libraries
+* `AngularJS 2.0` with `Typescript`
 * `Typings`, to develop with old libraries and typescript
-* `SASS`, `Bootstrap-sass` and `Gentelella` for styling
-* `Webpack` for next-gen UI generation :)
+* `SASS` and `Bootstrap-sass` for styling
