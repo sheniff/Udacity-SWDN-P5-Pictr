@@ -13,6 +13,10 @@ img {
   }
 }
 
+.toast-button:focus {
+  outline: 3px solid;
+}
+
 // App Shared Imports
 // --------------------------------------------------
 // These are the imports which make up the design of this app.
@@ -23,3 +27,4 @@ img {
 @import "../pages/create/create";
 @import "../pages/profile/profile";
 @import "../pages/detail/detail";
+@import "../pages/album/album";

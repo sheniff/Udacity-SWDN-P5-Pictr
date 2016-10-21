@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { CreatePage } from '../create/create';
 import { Pictr, ISearchResult } from '../../providers/pictr/pictr';
@@ -17,6 +17,7 @@ export class NewPictrPage {
     link: 'img/camera.png',
     title: '#pictr#camera#'
   };
+  @ViewChild('searchbar') searchbar: any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,6 +34,10 @@ export class NewPictrPage {
     this.pictr.getRandomPics().subscribe(
       res => this.alertNewContent(res)
     );
+  }
+
+  ionViewDidEnter() {
+    this.searchbar.setFocus();
   }
 
   onPicSelected(event, pic) {
@@ -108,9 +113,12 @@ export class NewPictrPage {
     })
 
     toast.onDidDismiss(() => {
-      this.results = this.pictr.groupBy(content)
+      this.results = this.pictr.groupBy(content);
     })
 
-    toast.present()
+    toast.present().then(() => {
+      let btn = <any>document.querySelector('button.toast-button');
+      btn.focus();
+    })
   }
 }

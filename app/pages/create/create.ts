@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Pictr, IPost } from '../../providers/pictr/pictr';
 import { DetailPage } from '../detail/detail';
@@ -12,6 +12,7 @@ import { ImgurResize } from '../../pipes/imgurResize';
 export class CreatePage {
   public pic: any;
   public post: IPost;
+  @ViewChild('message') message: any;
 
   constructor(
     private navCtrl: NavController,
@@ -23,6 +24,10 @@ export class CreatePage {
 
   ionViewWillEnter() {
     this.initPost();
+  }
+
+  ionViewDidEnter() {
+    this.message.setFocus();
   }
 
   savePost(post: IPost) {
