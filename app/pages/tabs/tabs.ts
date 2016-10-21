@@ -32,6 +32,10 @@ export class TabsPage {
   }
 
   private runOfflineDetector() {
+    if (navigator.onLine === false) {
+      this.presentToast('Network not available', 'top')
+    }
+
     window.addEventListener('offline', () => {
       this.presentToast('Network not available', 'top')
     })
