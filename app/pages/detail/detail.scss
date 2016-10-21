@@ -2,4 +2,12 @@
   .detail-picture-comment {
     padding: 0 20px;
   }
+
+  .image {
+    text-align: center;
+
+    img {
+      max-width: 600px;
+    }
+  }
 }
